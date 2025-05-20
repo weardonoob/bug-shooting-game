@@ -4,6 +4,11 @@ WIDTH = 800
 HEIGHT = 500
 TITLE = "horizontal_shooting_game"
 
+level_message_countdown = 90
+level = 1
+level_message = False
+req = 10
+numb_venoms = 3
 rows = 1
 game_state = "start"
 score = 0
@@ -23,9 +28,9 @@ def draw():
 
     screen.blit("space_background",(0,0))
     if game_state == "start":
-       screen.draw.text("press space to start \n kill enemies to win \n if you get hit you will be revived",(150,200))
+       screen.draw.text("press space to start \n kill enemies to win \n if you get hit 3 times you lose",(150,200))
     if game_state == "over":
-       screen.draw.text("yay you have killed all the enemies",(150,200))
+       screen.draw.text("you didn't make it better luck next time",(150,200))
     if game_state == "play":
       if not cap.death:
        cap.draw()
@@ -34,10 +39,13 @@ def draw():
          i.draw()
       for i in venoms:
          i.draw()
+    if level_message:
+       screen.draw.text("you are now entering level "+ str(level),(150,200))
+   
 
 
 def update():
-   global cap_lives, score, game_state
+   global cap_lives, score, game_state, numb_venoms, req, level, level_message, level_message_countdown
    # for i in range(3):
    #    ven = Actor("venom")
    #    ven.pos = 0,random.randint(40,HEIGHT - 40)
@@ -47,11 +55,14 @@ def update():
       if i.colliderect(cap):
            cap_lives -= 1
            venoms.remove(i)
+
+
       for b in shields:
            if b.colliderect(i):
               shields.remove(b)
               venoms.remove(i)
               score += 1
+              
    if cap_lives == 0:
     cap.death = True
    if cap.death:
@@ -70,7 +81,18 @@ def update():
             ven.x = -20
       for i in shields:
          i.x -= 2
+   if score == req:
+      numb_venoms += 1
+      req += 15
+      level += 1
+      level_message = True
 
+   if level_message:
+      level_message_countdown -= 1
+
+   if level_message_countdown == 0:
+      level_message = False
+      level_message_countdown = 90
 
 def on_key_down(key):
    global shields, game_state
@@ -91,7 +113,7 @@ def on_key_down(key):
 def create_venom():
    print("c")
    if game_state == "play":
-      for i in range(3):
+      for i in range(numb_venoms):
          ven = Actor("venom")
          ven.pos = 0,random.randint(40,HEIGHT - 40)
          venoms.append(ven)
