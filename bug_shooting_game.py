@@ -1,6 +1,6 @@
 import pgzrun,random,pyautogui
 
-WIDTH,Height = pyautogui.size()
+WIDTH,HEIGHT = pyautogui.size()
 
 TITLE = "bug_shooting_game"
 
