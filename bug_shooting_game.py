@@ -1,7 +1,7 @@
-import pgzrun,random
+import pgzrun,random,pyautogui
 
-WIDTH = 500
-HEIGHT = 800
+WIDTH,Height = pyautogui.size()
+
 TITLE = "bug_shooting_game"
 
 ship = Actor("galaga")
